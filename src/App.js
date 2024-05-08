@@ -8,7 +8,7 @@ import Header from '../src/components/header/header';
 import TodoList from '../src/components/todoList/TodoList';
 
 function App() {
-  const button = useRef(null);
+  const buttonRef = useRef(null);
   const [isShowModal, setIsShowModal] = useState(false);
 
   return (
@@ -19,11 +19,14 @@ function App() {
           narrowWidth
           title='Todoes'
           secondaryActions={
-            <CreateButton setIsShowModal={setIsShowModal} refs={button} />
+            <CreateButton
+              setIsShowModal={setIsShowModal}
+              refButton={buttonRef}
+            />
           }
         >
           <TodoList
-            refButton={button}
+            refButton={buttonRef}
             isShowModal={isShowModal}
             setIsShowModal={setIsShowModal}
           />

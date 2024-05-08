@@ -15,11 +15,11 @@ const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
   const addTodo = async (text) => {
     try {
       const res = await fetchApi({
-        url: `${baseUrl}/products`,
+        url: `${baseUrl}/todoes`,
         method: 'POST',
         body: text,
       });
-      console.log(res);
+      console.log('res', res);
     } catch (err) {
       console.log('Error when add todo');
       console.log(err);
@@ -31,7 +31,7 @@ const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
   const completeTodo = async (id) => {
     try {
       const res = await fetchApi({
-        url: `${baseUrl}/product/${id}`,
+        url: `${baseUrl}/todoes/${id}`,
         method: 'PUT',
       });
 
@@ -45,14 +45,14 @@ const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
     }
   };
 
-  const completeTodos = async () => {
+  const completeTodoList = async () => {
     try {
       let updatedTodos = data.filter((todo) => selectedItems.includes(todo.id));
 
       updatedTodos = updatedTodos.map((e) => e.id);
 
       const res = await fetchApi({
-        url: `${baseUrl}/products`,
+        url: `${baseUrl}/todoes/updateTodoList`,
         method: 'PUT',
         body: updatedTodos,
       });
@@ -70,7 +70,7 @@ const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
   const removeTodo = async (id) => {
     try {
       const res = await fetchApi({
-        url: `${baseUrl}/product/${id}`,
+        url: `${baseUrl}/todoes/${id}`,
         method: 'DELETE',
       });
 
@@ -82,10 +82,10 @@ const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
     }
   };
 
-  const removeTodos = async () => {
+  const removeTodoList = async () => {
     try {
       const res = await fetchApi({
-        url: `${baseUrl}/products/d`,
+        url: `${baseUrl}/todoes/deleteTodoList`,
         method: 'POST',
         body: selectedItems,
       });
@@ -108,11 +108,11 @@ const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
   const promotedBulkActions = [
     {
       content: 'Complete',
-      onAction: completeTodos,
+      onAction: completeTodoList,
     },
     {
       content: 'Delete',
-      onAction: removeTodos,
+      onAction: removeTodoList,
     },
   ];
 

@@ -6,21 +6,20 @@ const useFetchApi = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetched, setFetched] = useState(false);
+
   useEffect(() => {
-    const url = `${baseUrl}/products`;
+    const url = `${baseUrl}/todoes`;
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        const res = await fetch(url);
-        const d = await res.json();
-
-        setData(d.data);
+        const response = await fetch(url);
+        const responseData = await response.json();
+        setData(responseData.data);
         setLoading(false);
         setFetched(true);
-      } catch (err) {
-        console.log('Error when fetching data');
-      } finally {
+      } catch (error) {
+        console.error('Error fetching data:', error);
         setLoading(false);
       }
     };
