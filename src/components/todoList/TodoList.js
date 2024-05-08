@@ -19,6 +19,7 @@ const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
         method: 'POST',
         body: text,
       });
+      window.location.reload();
       console.log('res', res);
     } catch (err) {
       console.log('Error when add todo');
@@ -38,6 +39,7 @@ const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
       console.log(id);
 
       console.log(res);
+      window.location.reload();
     } catch (err) {
       console.log('Error when update todo');
     } finally {
@@ -60,6 +62,7 @@ const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
       setSelectedItems([]);
 
       console.log(res);
+      window.location.reload();
     } catch (err) {
       console.log('Error when update todoes');
     } finally {
@@ -75,6 +78,7 @@ const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
       });
 
       console.log(res);
+      window.location.reload();
     } catch (err) {
       console.log('Error when delete todo');
     } finally {
@@ -93,6 +97,7 @@ const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
       setSelectedItems([]);
 
       console.log(res);
+      window.location.reload();
     } catch (err) {
       console.log('Error when delete todoes');
     } finally {
