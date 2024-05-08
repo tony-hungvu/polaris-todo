@@ -10,9 +10,9 @@ import React, { useContext } from 'react';
 
 import TodoContext from '../../context/todoContext';
 
-const Todo = ({ item }) => {
+const Todo = (data) => {
   const { completeTodo, removeTodo } = useContext(TodoContext);
-  const { id, text, isCompleted } = item;
+  const { id, text, isCompleted } = data;
 
   const handleComplete = () => {
     completeTodo(id);
