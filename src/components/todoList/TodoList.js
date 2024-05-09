@@ -9,99 +9,125 @@ import { fetchApi } from '../../apis/fetchApi.js';
 import useFetchApi from '../../hooks/useFetchApi.js';
 
 const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
-  const { data } = useFetchApi();
+  const { data, setData } = useFetchApi();
   const [selectedItems, setSelectedItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [fetched, setFetched] = useState(false);
 
   const addTodo = async (text) => {
     try {
-      const res = await fetchApi({
+      setLoading(true);
+      const { todoes } = await fetchApi({
         url: `${baseUrl}/todoes`,
         method: 'POST',
         body: text,
       });
-      window.location.reload();
-      console.log('res', res);
+      setData([...data, todoes]);
+      setLoading(false);
+      setFetched(true);
     } catch (err) {
       console.log('Error when add todo');
       console.log(err);
     } finally {
       console.log('Success');
+      setLoading(false);
     }
   };
 
   const completeTodo = async (id) => {
     try {
-      const res = await fetchApi({
+      setLoading(true);
+      const { updatedTodo } = await fetchApi({
         url: `${baseUrl}/todoes/${id}`,
         method: 'PUT',
       });
-
-      console.log(id);
-
-      console.log(res);
-      window.location.reload();
+      setData((prevData) =>
+        prevData.map((todo) =>
+          todo.id === updatedTodo.id ? updatedTodo : todo
+        )
+      );
+      setLoading(false);
+      setFetched(true);
     } catch (err) {
       console.log('Error when update todo');
     } finally {
       console.log('Success');
+      setLoading(false);
     }
   };
 
   const completeTodoList = async () => {
     try {
-      let updatedTodos = data.filter((todo) => selectedItems.includes(todo.id));
+      setLoading(true);
+      const updatedTodoIds = data
+        .filter((todo) => selectedItems.includes(todo.id))
+        .map((todo) => todo.id);
 
-      updatedTodos = updatedTodos.map((e) => e.id);
-
-      const res = await fetchApi({
+      const { updatedList } = await fetchApi({
         url: `${baseUrl}/todoes/updateTodoList`,
         method: 'PUT',
-        body: updatedTodos,
+        body: updatedTodoIds,
       });
 
-      setSelectedItems([]);
+      setData((prevData) =>
+        prevData.map((todo) =>
+          updatedTodoIds.includes(todo.id)
+            ? updatedList.find((updatedTodo) => updatedTodo.id === todo.id) ||
+              todo
+            : todo
+        )
+      );
 
-      console.log(res);
-      window.location.reload();
+      setSelectedItems([]);
+      setLoading(false);
+      setFetched(true);
     } catch (err) {
-      console.log('Error when update todoes');
+      console.log('Error when updating todos');
     } finally {
       console.log('Success');
+      setLoading(false);
     }
   };
 
   const removeTodo = async (id) => {
     try {
-      const res = await fetchApi({
+      setLoading(true);
+      await fetchApi({
         url: `${baseUrl}/todoes/${id}`,
         method: 'DELETE',
       });
 
-      console.log(res);
-      window.location.reload();
+      setData((prevData) => prevData.filter((todo) => todo.id !== id));
+      setLoading(false);
+      setFetched(true);
     } catch (err) {
       console.log('Error when delete todo');
     } finally {
       console.log('Success');
+      setLoading(false);
     }
   };
 
   const removeTodoList = async () => {
     try {
-      const res = await fetchApi({
+      setLoading(true);
+      await fetchApi({
         url: `${baseUrl}/todoes/deleteTodoList`,
         method: 'POST',
         body: selectedItems,
       });
 
+      setData((prevData) =>
+        prevData.filter((todo) => !selectedItems.includes(todo.id))
+      );
       setSelectedItems([]);
-
-      console.log(res);
-      window.location.reload();
+      setLoading(false);
+      setFetched(true);
     } catch (err) {
       console.log('Error when delete todoes');
     } finally {
       console.log('Success');
+      setLoading(false);
     }
   };
 
@@ -129,6 +155,8 @@ const TodoList = ({ isShowModal, setIsShowModal, refButton }) => {
           items={data}
           renderItem={Todo}
           selectedItems={selectedItems}
+          loading={loading}
+          fetched={fetched}
           onSelectionChange={setSelectedItems}
           promotedBulkActions={promotedBulkActions}
           totalItemsCount={data.length}
