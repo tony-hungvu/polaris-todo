@@ -8,7 +8,7 @@ const useFetchApi = () => {
   const [fetched, setFetched] = useState(false);
 
   useEffect(() => {
-    const url = `${baseUrl}/todoes`;
+    const url = `${baseUrl}/todoes?sort=desc&limit=10`;
     const fetchData = async () => {
       try {
         setLoading(true);
